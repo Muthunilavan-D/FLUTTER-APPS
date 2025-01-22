@@ -1,0 +1,57 @@
+class _YourWidgetState extends State<YourWidget> {
+  final _formKey = GlobalKey<FormState>();
+  var _selectedCategory = categories.entries.first.value; // Default value
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Add"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              DropdownButtonFormField(
+                value: _selectedCategory, // Default selected value
+                items: [
+                  for (final category in categories.entries)
+                    DropdownMenuItem(
+                      value: category.value, // Unique value for each item
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 16,
+                            height: 16,
+                            color: category.value.color,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(category.value.title),
+                        ],
+                      ),
+                    )
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategory = value; // Update the selected value
+                  });
+                },
+              ),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    print("Selected category: $_selectedCategory");
+                  }
+                },
+                child: const Text("Submit"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
