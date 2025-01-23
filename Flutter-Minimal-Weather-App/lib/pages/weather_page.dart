@@ -6,11 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
-
+  @override
   State<WeatherPage> createState() => _WeatherPageState();
 }
 
 class _WeatherPageState extends State<WeatherPage> {
+  String condition = "";
   final _weatherService = WeatherService('c9bf77369e8e15abc2e0769502d47934');
   Weather? _weather;
 
@@ -36,25 +37,71 @@ class _WeatherPageState extends State<WeatherPage> {
 
     switch (maincondition.toLowerCase()) {
       case 'clouds':
+        {
+          condition = "CONDITION: Cloudy";
+          return 'assets/cloud.json';
+        }
+
       case 'mist':
+        {
+          condition = "CONDITION: Mist";
+          return 'assets/cloud.json';
+        }
       case 'haze':
+        {
+          condition = "CONDITION: Haze";
+          return 'assets/cloud.json';
+        }
       case 'fog':
+        {
+          condition = "CONDITION: Foggy";
+          return 'assets/cloud.json';
+        }
       case 'dust':
+        {
+          condition = "CONDITION: Dusty";
+          return 'assets/cloud.json';
+        }
       case 'smoke':
-        return 'assets/cloud.json';
+        {
+          condition = "CONDITION: Smoky";
+          return 'assets/cloud.json';
+        }
+
       case 'rain':
+        {
+          condition = "CONDITION: Raining";
+          return 'assets/rain.json';
+        }
       case 'drizzle':
+        {
+          condition = "CONDITION: Drizzling";
+          return 'assets/rain.json';
+        }
       case 'shower rain':
-        return 'assets/rain.json';
+        {
+          condition = "CONDITION:Shower Rain";
+          return 'assets/rain.json';
+        }
       case 'thunderstorm':
-        return "assets/thunder.json";
+        {
+          condition = "CONDITION: Thunderstorm";
+          return "assets/thunder.json";
+        }
       case 'clear':
-        return 'assets/sunny.json';
+        {
+          condition = "CONDITION: Clear";
+          return 'assets/sunny.json';
+        }
       default:
-        return 'assets/sunny.json';
+        {
+          condition = "CONDITION: Sunny";
+          return 'assets/sunny.json';
+        }
     }
   }
 
+  @override
   void initState() {
     super.initState();
     _fetchWeather();
@@ -63,38 +110,72 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: const Color.fromARGB(255, 104, 104, 104),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 206, 203, 203),
         toolbarHeight: 30,
         title: Text(
           "Minimal Weather App!",
-          style: GoogleFonts.slabo27px(color: const Color.fromARGB(255, 23, 30, 34),fontWeight: FontWeight.bold),
+          style: GoogleFonts.slabo27px(
+              color: const Color.fromARGB(255, 23, 30, 34),
+              fontWeight: FontWeight.bold),
         ),
       ),
-      backgroundColor: const Color.fromARGB(229, 27, 27, 27),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 25,),
-            const Icon(Icons.location_on,color: Color.fromARGB(255, 217, 218, 218),),
-            Text(
-              _weather?.cityName ?? "loading",
-              style: GoogleFonts.bebasNeue(
-                  color: Colors.blueGrey,
+      // backgroundColor: const Color.fromARGB(229, 27, 27, 27),
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Color.fromARGB(229, 27, 27, 27),
+          Color.fromARGB(228, 53, 48, 48)
+        ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 25,
+              ),
+              const Icon(
+                Icons.location_on,
+                color: Color.fromARGB(255, 217, 218, 218),
+              ),
+              Text(
+                _weather?.cityName ?? "Loading..",
+                style: GoogleFonts.bebasNeue(
+                    color: const Color.fromARGB(255, 13, 91, 134),
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                condition,
+                style: GoogleFonts.belanosima(
                   fontSize: 36,
-                  fontWeight: FontWeight.bold),
-            ),
-            const Spacer(),
-            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
-            const Spacer(),
-            CircleAvatar(radius: 45,backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-              child: Text('${_weather?.temperature.round()}°C',
-                  style: GoogleFonts.bebasNeue(
-                      color: Colors.blueGrey,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold)),
-            ),const SizedBox(height: 25,)
-          ],
+                  color: const Color.fromARGB(255, 189, 212, 224),
+                ),
+              ),
+              const Spacer(),
+              Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
+              const Spacer(),
+              Container(
+                alignment: Alignment.center,
+                width: 120,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: const LinearGradient(colors: [
+                      Color.fromARGB(255, 244, 125, 145),
+                      Color.fromARGB(255, 249, 180, 140)
+                    ])),
+                child: Text('${_weather?.temperature.round()}°C',
+                    style: GoogleFonts.macondo(
+                        color: const Color.fromARGB(255, 7, 56, 82),
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(
+                height: 25,
+              )
+            ],
+          ),
         ),
       ),
     );
